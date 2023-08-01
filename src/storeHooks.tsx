@@ -72,13 +72,28 @@ export function useFieldValue<V = any>(name: Path | PathSegment): V {
     return useSyncExternalStore(subscribe, getSnapshot);
 }
 
-export function useSubmitCount(): number {
+export function useFormSubmitCount(): number {
     const refCurrent = useFormContext();
 
     const {subscribe, getSnapshot} = useMemo(
         () => {
             const subscribe = (listener: () => void) => refCurrent.subscribe(listener);
             const getSnapshot = () => refCurrent.submitCount;
+            return {subscribe, getSnapshot};
+        },
+        [refCurrent]
+    );
+
+    return useSyncExternalStore(subscribe, getSnapshot);
+}
+
+export function useFormSubmitting(): boolean {
+    const refCurrent = useFormContext();
+
+    const {subscribe, getSnapshot} = useMemo(
+        () => {
+            const subscribe = (listener: () => void) => refCurrent.subscribe(listener);
+            const getSnapshot = () => refCurrent.isSubmitting;
             return {subscribe, getSnapshot};
         },
         [refCurrent]

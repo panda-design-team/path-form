@@ -2,7 +2,7 @@ import {Children, cloneElement, isValidElement, ReactNode, useCallback, useEffec
 import {ValidateStatus} from 'antd/es/form/FormItem';
 import {Path, PathSegment} from '../path';
 import {useFormContext} from '../Context';
-import {useField, useSubmitCount} from '../storeHooks';
+import {useField, useFormSubmitCount} from '../storeHooks';
 import {FieldValidate} from '../interface';
 import {FieldLayout, FieldLayoutProps} from './FieldLayout';
 import {useFieldDefaultProps} from './FieldDefaultProps';
@@ -28,7 +28,7 @@ export const Field = (props: FieldProps) => {
     } = props;
     const {value, error, touched} = useField(name);
     const defaultProps = useFieldDefaultProps();
-    const submitCount = useSubmitCount();
+    const submitCount = useFormSubmitCount();
     const formContext = useFormContext();
     const {setFieldValue, setFieldValidate} = formContext;
     const removeValidateCallbackRef = useRef<() => void>();

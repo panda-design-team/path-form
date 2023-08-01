@@ -1,7 +1,6 @@
 import {useCallback, useRef} from 'react';
 import {isEmpty} from 'lodash';
 import {useFormContext} from './Context';
-import {useSubmitCount} from './storeHooks';
 
 type OnSuccess<T> = (value: T) => void;
 type OnFail = (errors: any) => void;
@@ -12,8 +11,6 @@ interface Ref<T> {
 }
 
 export function useFormSubmit<T extends object = any>(onSuccess?: OnSuccess<T>, onFail?: OnFail) {
-    // 订阅更新
-    useSubmitCount();
     const refCurrent = useFormContext<T>();
     const handlerRef = useRef<Ref<T>>({});
     handlerRef.current.onSuccess = onSuccess;
