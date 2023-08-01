@@ -21,20 +21,27 @@ export function useFormSubmit<T extends object = any>(onSuccess?: OnSuccess<T>, 
 
     const handleSubmit = useCallback(
         async () => {
-            refCurrent.submitCount++;
-            refCurrent.submitMutex++;
-            refCurrent.isSubmitting = Boolean(refCurrent.submitMutex);
-            refCurrent.emitAll();
-            const errors = await refCurrent.waitForValidation();
-            if (isEmpty(errors)) {
-                await handlerRef.current.onSuccess?.(refCurrent.values);
+            try {
+                refCurrent.submitCount++;
+                refCurrent.submitMutex++;
+                refCurrent.isSubmitting = Boolean(refCurrent.submitMutex);
+                refCurrent.emitAll();
+                const errors = await refCurrent.waitForValidation();
+                if (isEmpty(errors)) {
+                    await handlerRef.current.onSuccess?.(refCurrent.values);
+                }
+                else {
+                    await handlerRef.current.onFail?.(errors);
+                }
             }
-            else {
-                await handlerRef.current.onFail?.(errors);
+            catch {
+                // nothing
             }
-            refCurrent.submitMutex--;
-            refCurrent.isSubmitting = Boolean(refCurrent.submitMutex);
-            refCurrent.emitAll();
+            finally {
+                refCurrent.submitMutex--;
+                refCurrent.isSubmitting = Boolean(refCurrent.submitMutex);
+                refCurrent.emitAll();
+            }
         },
         // only ref
         // eslint-disable-next-line react-hooks/exhaustive-deps
