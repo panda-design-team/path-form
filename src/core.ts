@@ -6,7 +6,6 @@ import {FormProviderProps, FieldState, FieldValidate} from './interface';
 type Listener = () => void;
 type Errors = any;
 type ValueParams = any | ((prevValue: any) => any);
-type RemoveFieldValidateCallback = () => void;
 
 export interface FormRefObject<T = any> {
     values: T;
@@ -39,7 +38,7 @@ export interface FormRefObject<T = any> {
     getFieldValue: (name: (Path | PathSegment)) => any;
     setFieldValue: (name: (Path | PathSegment), value: ValueParams) => void;
     getFieldState: (name: (Path | PathSegment)) => FieldState;
-    setFieldValidate: (name: (Path | PathSegment), validate: FieldValidate) => RemoveFieldValidateCallback;
+    setFieldValidate: (name: (Path | PathSegment), validate: FieldValidate | undefined) => void;
     waitForValidation: () => Promise<Errors>;
 }
 
@@ -248,19 +247,18 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
         };
     };
 
-    ref.current.setFieldValidate = (name: Path | PathSegment, validate: FieldValidate) => {
+    ref.current.setFieldValidate = (name: Path | PathSegment, validate: FieldValidate | undefined) => {
         const encodedPath = encodePath(name);
         const currentValidate = ref.current.validateMap.get(encodedPath);
         if (currentValidate !== validate) {
-            ref.current.validateMap.set(encodedPath, validate);
-            private_debouncedValidation();
-        }
-        return () => {
-            const prevValidate = ref.current.validateMap.get(encodedPath);
-            if (prevValidate === validate) {
+            if (validate) {
+                ref.current.validateMap.set(encodedPath, validate);
+            }
+            else {
                 ref.current.validateMap.delete(encodedPath);
             }
-        };
+            private_debouncedValidation();
+        }
     };
 
     // TODO add enableValidationOnMount

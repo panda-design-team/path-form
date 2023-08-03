@@ -1,6 +1,6 @@
 import {Children, cloneElement, isValidElement, ReactNode, useCallback, useEffect, useMemo, useRef} from 'react';
 import {ValidateStatus} from 'antd/es/form/FormItem';
-import {Path, PathSegment} from '../path';
+import {encodePath, Path, PathSegment} from '../path';
 import {useFormContext} from '../Context';
 import {useField, useFormSubmitCount} from '../storeHooks';
 import {FieldValidate} from '../interface';
@@ -31,19 +31,16 @@ export const Field = (props: FieldProps) => {
     const submitCount = useFormSubmitCount();
     const formContext = useFormContext();
     const {setFieldValue, setFieldValidate} = formContext;
-    const removeValidateCallbackRef = useRef<() => void>();
-
-    if (validate) {
-        removeValidateCallbackRef.current = setFieldValidate(name, validate);
-    }
 
     useEffect(
         () => {
+            setFieldValidate(name, validate);
             return () => {
-                removeValidateCallbackRef.current?.();
+                setFieldValidate(name, undefined);
             };
         },
-        []
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [encodePath(name), setFieldValidate, validate]
     );
 
     const errorProps = useMemo(
