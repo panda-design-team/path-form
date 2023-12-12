@@ -42,10 +42,21 @@ export interface FormRefObject<T = any> {
     waitForValidation: () => Promise<Errors>;
 }
 
+const getInitialValue = (initialValues: any) => {
+    if (typeof initialValues === 'function') {
+        return initialValues();
+    }
+    if (initialValues === undefined) {
+        return {};
+    }
+    return initialValues;
+};
+
 export function getInternalRef<T extends object = any>(props: FormProviderProps<T>) {
+    const initialValues: T = getInitialValue(props.initialValues);
     const ref = {
         current: {
-            values: props.initialValues ?? ({} as T),
+            values: initialValues,
             errors: {},
             touched: {},
             validate: props.validate,

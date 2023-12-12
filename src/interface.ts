@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import {FormRefObject} from './core';
 
 export interface FormProviderProps<T> {
-    initialValues?: T;
+    initialValues?: T | (() => T);
     // initialErrors?: any;
     // initialTouched?: any;
     onInternalRefCreate?: (refCurrent: FormRefObject<T>) => FormRefObject<T>;
