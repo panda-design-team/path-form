@@ -1,19 +1,23 @@
 import {ComponentType, ReactNode} from 'react';
-import styled from '@emotion/styled';
+import {css} from '@emotion/css';
 import {decodePath, Path, PathSegment} from '../path';
 import {useFieldValue} from '../storeHooks';
 import {DefaultAddButton, FieldArrayAddButton} from './FieldArrayAddButton';
 import {AddButtonProps, DeleteButtonProps} from './FieldArrayInterface';
 import {DefaultDeleteButton, FieldArrayDeleteButton} from './FieldArrayDeleteButton';
 
+const defaultContainerCss = css`
+    display: flex;
+    gap: 8px;
+`;
+
 interface ContainerProps {
     children: ReactNode;
 }
 
-const DefaultContainer = styled.div`
-    display: flex;
-    gap: 8px;
-`;
+const DefaultContainer = ({children}: ContainerProps) => {
+    return <div className={defaultContainerCss}>{children}</div>;
+};
 
 const defaultCreateDefaultValue = (): any => '';
 

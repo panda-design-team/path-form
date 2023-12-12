@@ -1,12 +1,12 @@
 import {Button, createIcon} from '@panda-design/components';
 import {ComponentType, useCallback} from 'react';
-import styled from '@emotion/styled';
+import {css} from '@emotion/css';
 import {Delete} from '../icons';
 import {Path} from '../path';
 import {useFormContext} from '../Context';
 import {DeleteButtonProps} from './FieldArrayInterface';
 
-const ButtonContainer = styled.div`
+const buttonContainerCss = css`
     display: flex;
     align-items: center;
     margin-left: -8px;
@@ -30,7 +30,7 @@ export function DefaultDeleteButton({disabled, disabledReason, onDelete}: Delete
 
 export function DefaultTableDeleteButton({disabled, disabledReason, onDelete}: DeleteButtonProps) {
     return (
-        <ButtonContainer>
+        <div className={buttonContainerCss}>
             <Button
                 type="text"
                 icon={<IconDelete />}
@@ -40,7 +40,7 @@ export function DefaultTableDeleteButton({disabled, disabledReason, onDelete}: D
             >
                 删除
             </Button>
-        </ButtonContainer>
+        </div>
     );
 }
 

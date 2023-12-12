@@ -17,7 +17,7 @@ const getClassName = ({hasGap, width}: Params) => css`
     `}
 `;
 
-export interface FieldLayoutProps extends FormItemProps {
+export interface FieldLayoutProps extends Omit<FormItemProps, 'rules'> {
     width?: number;
     hasGap?: boolean;
     extraChildren?: ReactNode;

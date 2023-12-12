@@ -1,6 +1,6 @@
 import {ComponentType, useMemo} from 'react';
 import {TableColumnsType, TableProps} from 'antd';
-import styled from '@emotion/styled';
+import {css} from '@emotion/css';
 import {Path} from '../path';
 import {useFieldValue} from '../storeHooks';
 import {AddButtonProps, DeleteButtonProps} from './FieldArrayInterface';
@@ -8,9 +8,11 @@ import {DefaultAddButton, FieldArrayAddButton} from './FieldArrayAddButton';
 import {DefaultTableDeleteButton} from './FieldArrayDeleteButton';
 import FieldArrayInnerTable from './FieldArrayInnerTable';
 
-const Gap = styled.div`
-    height: 8px
+const gapCss = css`
+    height: 8px;
 `;
+
+const Gap = () => <div className={gapCss} />;
 
 const defaultCreateDefaultValue = (): any => ({});
 
