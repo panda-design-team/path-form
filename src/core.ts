@@ -5,7 +5,7 @@ import {FormProviderProps, FieldState, FieldValidate} from './interface';
 
 type Listener = () => void;
 type Errors = any;
-type ValueParams = any | ((prevValue: any) => any);
+type ValueParams<V = any> = V | ((prevValue: V) => V);
 
 export interface FormRefObject<T = any> {
     values: T;
@@ -35,10 +35,10 @@ export interface FormRefObject<T = any> {
     // setFieldTouched: (name: (Path | PathSegment), touched: boolean) => void;
     getFieldError: (name: (Path | PathSegment)) => string;
     // setFieldError: (name: (Path | PathSegment), error: string) => void;
-    getFieldValue: (name: (Path | PathSegment)) => any;
-    setFieldValue: (name: (Path | PathSegment), value: ValueParams) => void;
-    getFieldState: (name: (Path | PathSegment)) => FieldState;
-    setFieldValidate: (name: (Path | PathSegment), validate: FieldValidate | undefined) => void;
+    getFieldValue: <V = any>(name: (Path | PathSegment)) => V;
+    setFieldValue: <V = any>(name: (Path | PathSegment), value: ValueParams<V>) => void;
+    getFieldState: <V = any>(name: (Path | PathSegment)) => FieldState<V>;
+    setFieldValidate: <V = any>(name: (Path | PathSegment), validate: FieldValidate<V> | undefined) => void;
     waitForValidation: () => Promise<Errors>;
 }
 
@@ -232,14 +232,15 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
     //     set(ref.current.errors, name, error);
     // };
 
-    ref.current.getFieldValue = (name: Path | PathSegment) => {
+    ref.current.getFieldValue = <V = any>(name: Path | PathSegment): V => {
         return get(ref.current.values, name);
     };
 
-    ref.current.setFieldValue = (name: Path | PathSegment, value: ValueParams) => {
+    ref.current.setFieldValue = <V = any>(name: Path | PathSegment, value: ValueParams<V>): void => {
         let nextValue = value;
         if (typeof value === 'function') {
             const prevValue = get(ref.current.values, name);
+            // @ts-expect-error
             nextValue = value(prevValue);
         }
         set(ref.current.values, name, nextValue);
@@ -250,7 +251,7 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
         private_debouncedValidation();
     };
 
-    ref.current.getFieldState = (name: Path | PathSegment) => {
+    ref.current.getFieldState = <V = any>(name: Path | PathSegment): FieldState<V> => {
         return {
             value: ref.current.getFieldValue(name),
             error: ref.current.getFieldError(name),
@@ -258,7 +259,7 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
         };
     };
 
-    ref.current.setFieldValidate = (name: Path | PathSegment, validate: FieldValidate | undefined) => {
+    ref.current.setFieldValidate = <V = any>(name: Path | PathSegment, validate: FieldValidate<V> | undefined) => {
         const encodedPath = encodePath(name);
         const currentValidate = ref.current.validateMap.get(encodedPath);
         if (currentValidate !== validate) {

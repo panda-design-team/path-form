@@ -4,7 +4,7 @@ import {encodePath, Path, PathSegment} from './path';
 import {FieldState} from './interface';
 import {useFormContext} from './Context';
 
-export function useField<V>(name: Path | PathSegment): FieldState<V> {
+export function useField<V = any>(name: Path | PathSegment): FieldState<V> {
     const refCurrent = useFormContext();
 
     const snapshot = useRef<FieldState>(null as unknown as FieldState);
