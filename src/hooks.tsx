@@ -2,8 +2,8 @@ import {useCallback, useRef} from 'react';
 import {isEmpty} from 'lodash';
 import {useFormContext} from './Context';
 
-type OnSuccess<T> = (value: T) => void | Promise<void>;
-type OnFail = (errors: any) => void | Promise<void>;
+type OnSuccess<T> = (value: T) => any | Promise<any>;
+type OnFail = (errors: any) => any | Promise<any>;
 
 interface Ref<T> {
     onSuccess?: OnSuccess<T>;
