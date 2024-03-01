@@ -6,6 +6,7 @@ export interface FormProviderProps<T> {
     // initialErrors?: any;
     // initialTouched?: any;
     onInternalRefCreate?: (refCurrent: FormRefObject<T>) => FormRefObject<T>;
+    emitCompareStrategy?: 'equal' | 'related' | 'all' | ((target: string, candidate: string) => boolean);
     validate?: (values: T) => any;
     children: ReactNode;
 }

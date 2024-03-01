@@ -52,8 +52,12 @@ const getInitialValue = (initialValues: any) => {
     return initialValues;
 };
 
+const relatedCompareFn = (a: string, b: string) => a.startsWith(b) || b.startsWith(a);
+
 export function getInternalRef<T extends object = any>(props: FormProviderProps<T>) {
     const initialValues: T = getInitialValue(props.initialValues);
+    const emitCompareStrategy = props.emitCompareStrategy ?? 'related';
+
     const ref = {
         current: {
             values: initialValues,
@@ -79,12 +83,41 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
     };
 
     ref.current.emitField = (name: Path | PathSegment): void => {
-        const key = encodePath(name);
-        const listeners = ref.current.listenersMap.get(key);
-        if (!listeners) {
+        if (emitCompareStrategy === 'all') {
+            ref.current.emitAll();
             return;
         }
-        listeners.forEach(listener => listener());
+
+        const targetKey = encodePath(name);
+
+        if (emitCompareStrategy === 'equal') {
+            const listeners = ref.current.listenersMap.get(targetKey);
+            if (!listeners) {
+                return;
+            }
+            listeners.forEach(listener => listener());
+        }
+
+        if (emitCompareStrategy === 'related') {
+            ref.current.listenersMap.forEach(
+                (listeners, key) => {
+                    if (relatedCompareFn(targetKey, key)) {
+                        listeners.forEach(listener => listener());
+                    }
+                }
+            );
+            return;
+        }
+
+        if (typeof emitCompareStrategy === 'function') {
+            ref.current.listenersMap.forEach(
+                (listeners, key) => {
+                    if (emitCompareStrategy(targetKey, key)) {
+                        listeners.forEach(listener => listener());
+                    }
+                }
+            );
+        }
     };
 
     ref.current.subscribe = (listener: () => void) => {
