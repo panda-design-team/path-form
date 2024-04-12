@@ -48,6 +48,9 @@ export const Field = (props: FieldProps) => {
             if (submitCount === 0 && !touched && !enableErrorWhenUntouched) {
                 return {};
             }
+            if (typeof error === 'object' && error !== null) {
+                return {};
+            }
             return {
                 validateStatus: error ? 'error' : undefined,
                 help: error,

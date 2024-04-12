@@ -17,7 +17,9 @@ const getClassName = ({hasGap, width}: Params) => css`
     `}
 `;
 
-export interface FieldLayoutProps extends Omit<FormItemProps, 'rules' | 'shouldUpdate' | 'dependencies' | 'validateDebounce' | 'validateTrigger' | 'validateFirst'> {
+// help 作为内部属性
+// rules 用 validate 代替
+export interface FieldLayoutProps extends Omit<FormItemProps, 'help' | 'rules' | 'shouldUpdate' | 'dependencies' | 'validateDebounce' | 'validateTrigger' | 'validateFirst'> {
     width?: number;
     hasGap?: boolean;
     // 开源版本没有以下的
