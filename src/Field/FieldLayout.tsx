@@ -47,11 +47,11 @@ export function FieldLayout({
 
     return (
         <Form.Item
-            {...rest}
             {...layoutProps}
             colon={false}
             labelAlign="left"
             className={cx(nextClassName, className)}
+            {...rest}
         >
             <>
                 {children}
