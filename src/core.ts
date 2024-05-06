@@ -17,12 +17,12 @@ export interface FormRefObject<T = any> {
     isSubmitting: boolean;
     submitMutex: number;
     submitCount: number;
-    listeners: Set<Listener>;
+    listenersMeta: Set<Listener>;
     listenersMap: Map<string, Set<Listener>>;
     // utils
-    emitAll: () => void;
+    emitMeta: () => void;
     emitField: (name: (Path | PathSegment)) => void;
-    subscribe: (listener: () => void) => () => void;
+    subscribeMeta: (listener: () => void) => () => void;
     subscribeField: (name: (Path | PathSegment), listener: () => void) => () => void;
     // getters and setters
     getTouched: () => any;
@@ -69,22 +69,27 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
             isSubmitting: false,
             submitMutex: 0,
             submitCount: 0,
-            listeners: new Set(),
+            listenersMeta: new Set(),
             listenersMap: new Map(),
         } as FormRefObject<T>,
     };
 
     // subscription utils
-    ref.current.emitAll = (): void => {
+    ref.current.emitMeta = (): void => {
+        ref.current.listenersMeta.forEach(listener => listener());
+    };
+
+    const private_emitAllFields = (): void => {
         ref.current.listenersMap.forEach(
             listeners => listeners.forEach(listener => listener())
         );
-        ref.current.listeners.forEach(listener => listener());
     };
 
     ref.current.emitField = (name: Path | PathSegment): void => {
         if (emitCompareStrategy === 'all') {
-            ref.current.emitAll();
+            ref.current.listenersMap.forEach(
+                listeners => listeners.forEach(listener => listener())
+            );
             return;
         }
 
@@ -120,10 +125,10 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
         }
     };
 
-    ref.current.subscribe = (listener: () => void) => {
-        ref.current.listeners.add(listener);
+    ref.current.subscribeMeta = (listener: () => void) => {
+        ref.current.listenersMeta.add(listener);
         return () => {
-            ref.current.listeners.delete(listener);
+            ref.current.listenersMeta.delete(listener);
         };
     };
 
@@ -183,35 +188,32 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
         return promise;
     };
 
-    const private_validationWithSideEffect = () => {
-        const promise = private_pureValidation();
-        workInProgressValidationPromiseFiber = promise;
-        promise.then(errors => {
-            if (workInProgressValidationPromiseFiber === promise) {
-                ref.current.errors = errors;
-                ref.current.isValidating = false;
-                workInProgressValidationPromiseResolve?.();
-                workInProgressValidationPromise = null;
-                workInProgressValidationPromiseResolve = null;
-                ref.current.emitAll();
-            }
-        });
-        return promise;
-    };
-
     let timer: any = null;
     const private_debouncedValidation = () => {
         ref.current.isValidating = true;
+        ref.current.emitMeta();
         if (!workInProgressValidationPromise) {
             workInProgressValidationPromise = new Promise(resolve => {
                 workInProgressValidationPromiseResolve = resolve;
             });
         }
-        // workInProgressValidationPromiseFiber = null;
+        workInProgressValidationPromiseFiber = null;
         clearTimeout(timer);
         timer = setTimeout(
             () => {
-                private_validationWithSideEffect();
+                const promise = private_pureValidation();
+                workInProgressValidationPromiseFiber = promise;
+                promise.then(errors => {
+                    if (workInProgressValidationPromiseFiber === promise) {
+                        ref.current.errors = errors;
+                        ref.current.isValidating = false;
+                        workInProgressValidationPromiseResolve?.();
+                        workInProgressValidationPromise = null;
+                        workInProgressValidationPromiseResolve = null;
+                        ref.current.emitMeta();
+                        private_emitAllFields();
+                    }
+                });
             },
             300
         );

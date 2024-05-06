@@ -22,7 +22,7 @@ export function useFormSubmit<T extends object = any>(onSuccess?: OnSuccess<T>, 
                 refCurrent.submitCount++;
                 refCurrent.submitMutex++;
                 refCurrent.isSubmitting = Boolean(refCurrent.submitMutex);
-                refCurrent.emitAll();
+                refCurrent.emitMeta();
                 const errors = await refCurrent.waitForValidation();
                 if (isEmpty(errors)) {
                     await handlerRef.current.onSuccess?.(refCurrent.values);
@@ -37,7 +37,7 @@ export function useFormSubmit<T extends object = any>(onSuccess?: OnSuccess<T>, 
             finally {
                 refCurrent.submitMutex--;
                 refCurrent.isSubmitting = Boolean(refCurrent.submitMutex);
-                refCurrent.emitAll();
+                refCurrent.emitMeta();
             }
         },
         // only ref

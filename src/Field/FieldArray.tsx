@@ -1,7 +1,7 @@
 import {ComponentType, ReactNode} from 'react';
 import {css} from '@emotion/css';
 import {decodePath, Path, PathSegment} from '../path';
-import {useFieldValue} from '../storeHooks';
+import {useFieldValue} from '../useField';
 import {DefaultAddButton, FieldArrayAddButton} from './FieldArrayAddButton';
 import {AddButtonProps, DeleteButtonProps} from './FieldArrayInterface';
 import {DefaultDeleteButton, FieldArrayDeleteButton} from './FieldArrayDeleteButton';

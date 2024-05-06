@@ -2,7 +2,7 @@ import {ComponentType, useMemo} from 'react';
 import {TableColumnsType, TableProps} from 'antd';
 import {css} from '@emotion/css';
 import {Path} from '../path';
-import {useFieldValue} from '../storeHooks';
+import {useFieldValue} from '../useField';
 import {AddButtonProps, DeleteButtonProps} from './FieldArrayInterface';
 import {DefaultAddButton, FieldArrayAddButton} from './FieldArrayAddButton';
 import {DefaultTableDeleteButton} from './FieldArrayDeleteButton';
