@@ -2,7 +2,7 @@ import {encodePath, decodePath, Path, PathSegment} from './path';
 import {FormProviderProps, FieldState, FieldValidate} from './interface';
 import {FormProvider, useFormContext} from './Context';
 import {useFormSubmit} from './hooks';
-import {useField, useFieldValue, useFormSubmitCount, useFormSubmitting} from './storeHooks';
+import {useField, useFieldValue, useFormSubmitCount, useFormSubmitting, useFormValidating} from './storeHooks';
 import {Field, FieldProps} from './Field';
 import {FieldLayout, FieldLayoutProps} from './Field/FieldLayout';
 import {FieldArray, FieldArrayProps} from './Field/FieldArray';
@@ -19,6 +19,7 @@ export {
     useFormSubmit,
     useFormSubmitCount,
     useFormSubmitting,
+    useFormValidating,
     useField,
     useFieldValue,
     encodePath,

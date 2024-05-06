@@ -101,3 +101,18 @@ export function useFormSubmitting(): boolean {
 
     return useSyncExternalStore(subscribe, getSnapshot);
 }
+
+export function useFormValidating(): boolean {
+    const refCurrent = useFormContext();
+
+    const {subscribe, getSnapshot} = useMemo(
+        () => {
+            const subscribe = (listener: () => void) => refCurrent.subscribe(listener);
+            const getSnapshot = () => refCurrent.isValidating;
+            return {subscribe, getSnapshot};
+        },
+        [refCurrent]
+    );
+
+    return useSyncExternalStore(subscribe, getSnapshot);
+}
