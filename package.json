@@ -1,6 +1,6 @@
 {
   "name": "@panda-design/path-form",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Panda Design",
   "main": "es/index.js",
   "module": "es/index.js",

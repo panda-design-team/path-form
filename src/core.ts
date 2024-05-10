@@ -22,6 +22,7 @@ export interface FormRefObject<T = any> {
     // utils
     emitMeta: () => void;
     emitField: (name: (Path | PathSegment)) => void;
+    emitFields: () => void;
     subscribeMeta: (listener: () => void) => () => void;
     subscribeField: (name: (Path | PathSegment), listener: () => void) => () => void;
     // getters and setters
@@ -39,6 +40,8 @@ export interface FormRefObject<T = any> {
     setFieldValue: <V = any>(name: (Path | PathSegment), value: ValueParams<V>) => void;
     getFieldState: <V = any>(name: (Path | PathSegment)) => FieldState<V>;
     setFieldValidate: <V = any>(name: (Path | PathSegment), validate: FieldValidate<V> | undefined) => void;
+    resetFields: () => void;
+    validateFieldsDebounced: () => void;
     waitForValidation: () => Promise<Errors>;
 }
 
@@ -79,7 +82,7 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
         ref.current.listenersMeta.forEach(listener => listener());
     };
 
-    const private_emitAllFields = (): void => {
+    ref.current.emitFields = (): void => {
         ref.current.listenersMap.forEach(
             listeners => listeners.forEach(listener => listener())
         );
@@ -189,7 +192,7 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
     };
 
     let timer: any = null;
-    const private_debouncedValidation = () => {
+    ref.current.validateFieldsDebounced = () => {
         ref.current.isValidating = true;
         ref.current.emitMeta();
         if (!workInProgressValidationPromise) {
@@ -211,7 +214,7 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
                         workInProgressValidationPromise = null;
                         workInProgressValidationPromiseResolve = null;
                         ref.current.emitMeta();
-                        private_emitAllFields();
+                        ref.current.emitFields();
                     }
                 });
             },
@@ -283,7 +286,7 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
         set(ref.current.errors, name, undefined);
         set(ref.current.touched, name, true);
         ref.current.emitField(name);
-        private_debouncedValidation();
+        ref.current.validateFieldsDebounced();
     };
 
     ref.current.getFieldState = <V = any>(name: Path | PathSegment): FieldState<V> => {
@@ -304,12 +307,19 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
             else {
                 ref.current.validateMap.delete(encodedPath);
             }
-            private_debouncedValidation();
+            ref.current.validateFieldsDebounced();
         }
     };
 
+    ref.current.resetFields = () => {
+        ref.current.values = initialValues;
+        ref.current.errors = {};
+        ref.current.touched = {};
+        ref.current.validateFieldsDebounced();
+    };
+
     // TODO add enableValidationOnMount
-    private_debouncedValidation();
+    ref.current.validateFieldsDebounced();
 
     if (props.onInternalRefCreate) {
         ref.current = props.onInternalRefCreate(ref.current);
