@@ -1,6 +1,6 @@
 {
   "name": "@panda-design/path-form",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Panda Design",
   "main": "es/index.js",
   "module": "es/index.js",
@@ -14,15 +14,15 @@
   },
   "peerDependencies": {
     "@emotion/css": "^11.10.0",
-    "@panda-design/components": "^0.1.0",
-    "antd": "^5.12.2"
+    "@panda-design/components": "^0.3.0",
+    "antd": "^5.16.0"
   },
   "dependencies": {
     "use-sync-external-store": "^1.2.0"
   },
   "devDependencies": {
     "@emotion/css": "^11.10.0",
-    "@panda-design/components": "^0.1.0",
+    "@panda-design/components": "^0.3.2",
     "@reskript/cli": "^5.3.0",
     "@reskript/cli-lint": "^5.3.0",
     "@reskript/cli-test": "^5.3.0",
@@ -32,7 +32,7 @@
     "@types/lodash": "^4.14.182",
     "@types/react": "^18.2.14",
     "@types/use-sync-external-store": "^0.0.3",
-    "antd": "^5.12.2",
+    "antd": "^5.17.0",
     "core-js": "^3.23.2",
     "eslint": "^8.18.0",
     "glob": "^10.2.7",

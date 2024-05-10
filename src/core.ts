@@ -57,13 +57,19 @@ const getInitialValue = (initialValues: any) => {
 
 const relatedCompareFn = (a: string, b: string) => a.startsWith(b) || b.startsWith(a);
 
-export function getInternalRef<T extends object = any>(props: FormProviderProps<T>) {
-    const initialValues: T = getInitialValue(props.initialValues);
+interface RefObject<T> {
+    current: T;
+}
+
+export function getInternalRef<T extends object = any>(
+    props: FormProviderProps<T>,
+    initialValueRef: RefObject<T | (() => T) | undefined>
+): FormRefObject<T> {
     const emitCompareStrategy = props.emitCompareStrategy ?? 'related';
 
     const ref = {
         current: {
-            values: initialValues,
+            values: getInitialValue(initialValueRef.current),
             errors: {},
             touched: {},
             validate: props.validate,
@@ -312,7 +318,7 @@ export function getInternalRef<T extends object = any>(props: FormProviderProps<
     };
 
     ref.current.resetFields = () => {
-        ref.current.values = initialValues;
+        ref.current.values = getInitialValue(initialValueRef.current);
         ref.current.errors = {};
         ref.current.touched = {};
         ref.current.validateFieldsDebounced();
