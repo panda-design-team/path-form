@@ -26,6 +26,10 @@
 
 订阅表单提交状态
 
+### useFormChangeCount
+
+订阅表单变更次数
+
 ### useField
 
 订阅表单项的信息，包括 value、error、touched

@@ -3,7 +3,7 @@ import {FormProviderProps, FieldState, FieldValidate} from './interface';
 import {FormProvider, useFormContext} from './Context';
 import {useFormSubmit} from './useFormSubmit';
 import {useField, useFieldValue} from './useField';
-import {useFormSubmitCount, useFormSubmitting, useFormValidating} from './useMeta';
+import {useFormSubmitCount, useFormSubmitting, useFormValidating, useFormChangeCount} from './useMeta';
 import {Field, FieldProps} from './Field';
 import {FieldLayout, FieldLayoutProps} from './Field/FieldLayout';
 import {FieldArray, FieldArrayProps} from './Field/FieldArray';
@@ -21,6 +21,7 @@ export {
     useFormSubmitCount,
     useFormSubmitting,
     useFormValidating,
+    useFormChangeCount,
     useField,
     useFieldValue,
     encodePath,

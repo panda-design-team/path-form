@@ -17,6 +17,7 @@ export interface FormRefObject<T = any> {
     isSubmitting: boolean;
     submitMutex: number;
     submitCount: number;
+    changeCount: number;
     listenersMeta: Set<Listener>;
     listenersMap: Map<string, Set<Listener>>;
     // utils
@@ -78,6 +79,7 @@ export function getInternalRef<T extends object = any>(
             isSubmitting: false,
             submitMutex: 0,
             submitCount: 0,
+            changeCount: 0,
             listenersMeta: new Set(),
             listenersMap: new Map(),
         } as FormRefObject<T>,
@@ -291,8 +293,14 @@ export function getInternalRef<T extends object = any>(
         // TODO add enableClearErrorOnValueChange
         set(ref.current.errors, name, undefined);
         set(ref.current.touched, name, true);
-        ref.current.emitField(name);
+        /**
+         * 在 validateFieldsDebounced 中调用了 emitMeta
+         * emitMeta 需要触发 changeCount 的监听和 isValidating 的监听
+         * 此处顺序可以再考虑一下，目前考虑的是先触发 Meta 再触发 Field
+         */
+        ref.current.changeCount++;
         ref.current.validateFieldsDebounced();
+        ref.current.emitField(name);
     };
 
     ref.current.getFieldState = <V = any>(name: Path | PathSegment): FieldState<V> => {

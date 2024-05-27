@@ -46,3 +46,18 @@ export function useFormValidating(): boolean {
 
     return useSyncExternalStore(subscribe, getSnapshot);
 }
+
+export function useFormChangeCount(): number {
+    const refCurrent = useFormContext();
+
+    const {subscribe, getSnapshot} = useMemo(
+        () => {
+            const subscribe = (listener: () => void) => refCurrent.subscribeMeta(listener);
+            const getSnapshot = () => refCurrent.changeCount;
+            return {subscribe, getSnapshot};
+        },
+        [refCurrent]
+    );
+
+    return useSyncExternalStore(subscribe, getSnapshot);
+}
