@@ -8,6 +8,7 @@ type Errors = any;
 type ValueParams<V = any> = V | ((prevValue: V) => V);
 
 export interface FormRefObject<T = any> {
+    initialValues: T;
     values: T;
     errors: Errors;
     touched: any;
@@ -46,7 +47,7 @@ export interface FormRefObject<T = any> {
     waitForValidation: () => Promise<Errors>;
 }
 
-const getInitialValue = (initialValues: any) => {
+const getInitialValues = (initialValues: any) => {
     if (typeof initialValues === 'function') {
         return initialValues();
     }
@@ -67,10 +68,12 @@ export function getInternalRef<T extends object = any>(
     initialValueRef: RefObject<T | (() => T) | undefined>
 ): FormRefObject<T> {
     const emitCompareStrategy = props.emitCompareStrategy ?? 'related';
+    const initialValues = getInitialValues(initialValueRef.current);
 
     const ref = {
         current: {
-            values: getInitialValue(initialValueRef.current),
+            initialValues,
+            values: initialValues,
             errors: {},
             touched: {},
             validate: props.validate,
@@ -326,7 +329,7 @@ export function getInternalRef<T extends object = any>(
     };
 
     ref.current.resetFields = () => {
-        ref.current.values = getInitialValue(initialValueRef.current);
+        ref.current.values = getInitialValues(initialValueRef.current);
         ref.current.errors = {};
         ref.current.touched = {};
         ref.current.validateFieldsDebounced();

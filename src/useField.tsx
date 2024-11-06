@@ -1,4 +1,4 @@
-import {useMemo, useRef} from 'react';
+import {useCallback, useMemo, useRef} from 'react';
 import {useSyncExternalStore} from 'use-sync-external-store/shim';
 import {encodePath, Path, PathSegment} from './path';
 import {FieldState} from './interface';
@@ -71,3 +71,27 @@ export function useFieldValue<V = any>(name: Path | PathSegment): V {
 
     return useSyncExternalStore(subscribe, getSnapshot);
 }
+
+interface FieldHandlerOptions {
+    type?: 'checkbox';
+}
+
+export const useFieldHandler = (name: Path | PathSegment, options?: FieldHandlerOptions) => {
+    const {setFieldValue} = useFormContext();
+    const handleChange = useCallback(
+        (e: any) => {
+            let value = e;
+            if (e?.target) {
+                if (options?.type === 'checkbox' || e.target.type === 'checkbox') {
+                    value = e.target.checked;
+                }
+                else {
+                    value = e.target.value;
+                }
+            }
+            setFieldValue(name, value);
+        },
+        [name, options?.type, setFieldValue]
+    );
+    return handleChange;
+};

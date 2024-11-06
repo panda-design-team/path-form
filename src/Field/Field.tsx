@@ -1,8 +1,8 @@
-import {Children, cloneElement, isValidElement, ReactNode, useCallback, useEffect, useMemo} from 'react';
+import {Children, cloneElement, isValidElement, ReactNode, useEffect, useMemo} from 'react';
 import {ValidateStatus} from 'antd/es/form/FormItem';
 import {encodePath, Path, PathSegment} from '../path';
 import {useFormContext} from '../Context';
-import {useField} from '../useField';
+import {useField, useFieldHandler} from '../useField';
 import {useFormSubmitCount} from '../useMeta';
 import {FieldValidate} from '../interface';
 import {FieldLayout, FieldLayoutProps} from './FieldLayout';
@@ -31,7 +31,7 @@ export const Field = (props: FieldProps) => {
     const defaultProps = useFieldDefaultProps();
     const submitCount = useFormSubmitCount();
     const formContext = useFormContext();
-    const {setFieldValue, setFieldValidate} = formContext;
+    const {setFieldValidate} = formContext;
 
     useEffect(
         () => {
@@ -60,15 +60,7 @@ export const Field = (props: FieldProps) => {
         [error, submitCount, touched, enableErrorWhenUntouched]
     );
 
-    const handleChange = useCallback(
-        (e: any) => {
-            const value = e?.target
-                ? (props.type === 'checkbox' ? e.target.checked : e.target.value)
-                : e;
-            setFieldValue(name, value);
-        },
-        [name, props.type, setFieldValue]
-    );
+    const handleChange = useFieldHandler(name, {type});
 
     const clonedChildren = Children.map(children as any, child => {
         if (isValidElement(child)) {

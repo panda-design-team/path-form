@@ -2,9 +2,9 @@ import {encodePath, decodePath, Path, PathSegment} from './path';
 import {FormProviderProps, FieldState, FieldValidate} from './interface';
 import {FormProvider, useFormContext} from './Context';
 import {useFormSubmit} from './useFormSubmit';
-import {useField, useFieldValue} from './useField';
+import {useField, useFieldValue, useFieldHandler} from './useField';
 import {useFormSubmitCount, useFormSubmitting, useFormValidating, useFormChangeCount} from './useMeta';
-import {Field, FieldProps} from './Field';
+import {Field, FieldProps} from './Field/Field';
 import {FieldLayout, FieldLayoutProps} from './Field/FieldLayout';
 import {FieldArray, FieldArrayProps} from './Field/FieldArray';
 import {FieldDefaultPropsProvider, useFieldDefaultProps} from './Field/FieldDefaultProps';
@@ -24,6 +24,7 @@ export {
     useFormChangeCount,
     useField,
     useFieldValue,
+    useFieldHandler,
     encodePath,
     decodePath,
     Field,
