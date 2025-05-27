@@ -1,3 +1,4 @@
+import {describe, test, expect} from 'vitest';
 import {encodePath, decodePath} from '../path';
 
 describe('path', () => {

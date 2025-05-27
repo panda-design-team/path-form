@@ -16,7 +16,8 @@
   "peerDependencies": {
     "@emotion/css": "^11.10.0",
     "@panda-design/components": "^0.3.0",
-    "antd": "^5.16.0"
+    "antd": "^5.16.0",
+    "lodash": "^4.17.21"
   },
   "dependencies": {
     "use-sync-external-store": "^1.2.0"
@@ -34,10 +35,12 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "glob": "^10.2.7",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "stylelint": "^14.9.1",
     "typescript": "^5.1.6",
-    "typescript-eslint": "^8.32.1"
+    "typescript-eslint": "^8.32.1",
+    "vitest": "^3.1.4"
   },
   "repository": {
     "type": "git",
