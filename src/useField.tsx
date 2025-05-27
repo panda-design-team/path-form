@@ -35,7 +35,7 @@ export function useField<V = any>(name: Path | PathSegment): FieldState<V> {
             return {subscribe, getSnapshot};
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [encodePath(name)]
+        [encodePath(name)],
     );
 
     return useSyncExternalStore(subscribe, getSnapshot);
@@ -66,7 +66,7 @@ export function useFieldValue<V = any>(name: Path | PathSegment): V {
             return {subscribe, getSnapshot};
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [encodePath(name)]
+        [encodePath(name)],
     );
 
     return useSyncExternalStore(subscribe, getSnapshot);
@@ -91,7 +91,7 @@ export const useFieldHandler = (name: Path | PathSegment, options?: FieldHandler
             }
             setFieldValue(name, value);
         },
-        [name, options?.type, setFieldValue]
+        [name, options?.type, setFieldValue],
     );
     return handleChange;
 };

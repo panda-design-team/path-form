@@ -16,7 +16,7 @@ const Gap = () => <div className={gapCss} />;
 
 const defaultCreateDefaultValue = (): any => ({});
 
-export type FieldArrayTableCreateColumns<T = any> = (params: { keyPath: Path }) => TableColumnsType<T>;
+export type FieldArrayTableCreateColumns<T = any> = (params: {keyPath: Path}) => TableColumnsType<T>;
 
 export interface FieldArrayTableProps<T = any> extends TableProps<T> {
     keyPath: Path;
@@ -45,7 +45,7 @@ export function FieldArrayTable<T>({
                 return typeof value === 'object' ? {...value, key: index} : {key: index, value};
             }) as T[];
         },
-        [fieldValue]
+        [fieldValue],
     );
 
     return (

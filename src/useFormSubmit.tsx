@@ -42,7 +42,7 @@ export function useFormSubmit<T extends object = any>(onSuccess?: OnSuccess<T>, 
         },
         // only ref
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
+        [],
     );
     return handleSubmit;
 }

@@ -17,4 +17,5 @@ export interface FieldState<V = any> {
     touched: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 export type FieldValidate<V = any> = (value: V) => void | string | Promise<void | string>;

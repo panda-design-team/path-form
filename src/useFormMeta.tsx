@@ -12,7 +12,7 @@ export function useFormMeta<K extends keyof FormRefObject>(refKey: K): FormRefOb
             const getSnapshot = () => refCurrent[refKey];
             return {subscribe, getSnapshot};
         },
-        [refCurrent, refKey]
+        [refCurrent, refKey],
     );
 
     return useSyncExternalStore(subscribe, getSnapshot);

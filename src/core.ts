@@ -1,4 +1,4 @@
-/* eslint-disable no-underscore-dangle, camelcase */
+/* eslint-disable max-lines */
 import {get, isEmpty, merge, set} from 'lodash';
 import {encodePath, Path, PathSegment} from './path';
 import {FormProviderProps, FieldState, FieldValidate} from './interface';
@@ -65,7 +65,7 @@ interface RefObject<T> {
 
 export function getInternalRef<T extends object = any>(
     props: FormProviderProps<T>,
-    initialValueRef: RefObject<T | (() => T) | undefined>
+    initialValueRef: RefObject<T | (() => T) | undefined>,
 ): FormRefObject<T> {
     const emitCompareStrategy = props.emitCompareStrategy ?? 'related';
     const initialValues = getInitialValues(initialValueRef.current);
@@ -95,14 +95,14 @@ export function getInternalRef<T extends object = any>(
 
     ref.current.emitFields = (): void => {
         ref.current.listenersMap.forEach(
-            listeners => listeners.forEach(listener => listener())
+            listeners => listeners.forEach(listener => listener()),
         );
     };
 
     ref.current.emitField = (name: Path | PathSegment): void => {
         if (emitCompareStrategy === 'all') {
             ref.current.listenersMap.forEach(
-                listeners => listeners.forEach(listener => listener())
+                listeners => listeners.forEach(listener => listener()),
             );
             return;
         }
@@ -123,7 +123,7 @@ export function getInternalRef<T extends object = any>(
                     if (relatedCompareFn(targetKey, key)) {
                         listeners.forEach(listener => listener());
                     }
-                }
+                },
             );
             return;
         }
@@ -134,7 +134,7 @@ export function getInternalRef<T extends object = any>(
                     if (emitCompareStrategy(targetKey, key)) {
                         listeners.forEach(listener => listener());
                     }
-                }
+                },
             );
         }
     };
@@ -151,7 +151,8 @@ export function getInternalRef<T extends object = any>(
         const listeners = ref.current.listenersMap.get(key);
         if (listeners) {
             listeners.add(listener);
-        } else {
+        }
+        else {
             ref.current.listenersMap.set(key, new Set([listener]));
         }
         return () => {
@@ -169,9 +170,9 @@ export function getInternalRef<T extends object = any>(
         const values = ref.current.values;
         const errors = {};
         const validate = ref.current.validate;
-        const validateEntries: Array<[string, FieldValidate]> = Array.from(ref.current.validateMap.entries());
+        const validateEntries: [string, FieldValidate][] = Array.from(ref.current.validateMap.entries());
         let pendingMutex = validateEntries.length + (validate ? 1 : 0);
-        const promise: Promise<Errors> = new Promise(resolve => {
+        const promise = new Promise<Errors>((resolve) => {
             if (pendingMutex === 0) {
                 resolve(errors);
             }
@@ -207,7 +208,7 @@ export function getInternalRef<T extends object = any>(
         ref.current.isValidating = true;
         ref.current.emitMeta();
         if (!workInProgressValidationPromise) {
-            workInProgressValidationPromise = new Promise(resolve => {
+            workInProgressValidationPromise = new Promise((resolve) => {
                 workInProgressValidationPromiseResolve = resolve;
             });
         }
@@ -217,7 +218,7 @@ export function getInternalRef<T extends object = any>(
             () => {
                 const promise = private_pureValidation();
                 workInProgressValidationPromiseFiber = promise;
-                promise.then(errors => {
+                promise.then((errors) => {
                     if (workInProgressValidationPromiseFiber === promise) {
                         ref.current.errors = errors;
                         ref.current.isValidating = false;
@@ -229,7 +230,7 @@ export function getInternalRef<T extends object = any>(
                     }
                 });
             },
-            300
+            300,
         );
     };
 

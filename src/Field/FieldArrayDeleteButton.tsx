@@ -59,7 +59,7 @@ export function FieldArrayDeleteButton<T>({keyPath, index, record, array, atLeas
         () => {
             setFieldValue(keyPath, (array: any[]) => array.filter((_, i) => i !== index));
         },
-        [index, keyPath, setFieldValue]
+        [index, keyPath, setFieldValue],
     );
 
     return (

@@ -18,7 +18,7 @@ const transparentTheme: ThemeConfig = {
 interface InnerTableProps<T> extends TableProps<T> {
     dataSource: T[];
     keyPath: Path;
-    createColumns: (params: { keyPath: Path }) => TableColumnsType<T>;
+    createColumns: (params: {keyPath: Path}) => TableColumnsType<T>;
     DeleteButton: ComponentType<DeleteButtonProps>;
     atLeastOne?: boolean;
     disableActionColumn?: boolean;
@@ -36,28 +36,30 @@ function InnerTable({
     const columns = useMemo(
         (): TableColumnsType<any> => [
             ...createColumns({keyPath}),
-            ...disableActionColumn ? [] : [{
-                title: '操作',
-                dataIndex: 'action',
-                width: 100,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                render(name: string, record: any, index: number) {
-                    return (
-                        <FieldArrayDeleteButton
-                            keyPath={keyPath}
-                            index={index}
-                            record={record}
-                            array={dataSource}
-                            atLeastOne={atLeastOne}
-                            DeleteButton={DeleteButton}
-                        />
-                    );
-                },
-            }],
+            ...disableActionColumn
+                ? []
+                : [{
+                        title: '操作',
+                        dataIndex: 'action',
+                        width: 100,
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                        render(name: string, record: any, index: number) {
+                            return (
+                                <FieldArrayDeleteButton
+                                    keyPath={keyPath}
+                                    index={index}
+                                    record={record}
+                                    array={dataSource}
+                                    atLeastOne={atLeastOne}
+                                    DeleteButton={DeleteButton}
+                                />
+                            );
+                        },
+                    }],
         ],
         // keyPath should not change
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [DeleteButton, atLeastOne, createColumns, dataSource]
+        [DeleteButton, atLeastOne, createColumns, dataSource],
     );
 
     return (

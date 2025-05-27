@@ -16,7 +16,7 @@ export function FieldDefaultPropsProvider({disabled, children}: Props) {
         () => ({
             disabled,
         }),
-        [disabled]
+        [disabled],
     );
 
     return <FieldDefaultPropsContext.Provider value={context}>{children}</FieldDefaultPropsContext.Provider>;

@@ -34,7 +34,7 @@ export function FieldArrayAddButton<T>({keyPath, AddButton, createDefaultValue}:
         () => {
             setFieldValue(keyPath, (array: any) => [...(array ?? []), createDefaultValue()]);
         },
-        [createDefaultValue, keyPath, setFieldValue]
+        [createDefaultValue, keyPath, setFieldValue],
     );
     return <AddButton onAdd={handleAdd} />;
 }

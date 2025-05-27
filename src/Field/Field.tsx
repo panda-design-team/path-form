@@ -41,11 +41,11 @@ export const Field = (props: FieldProps) => {
             };
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [encodePath(name), setFieldValidate, validate]
+        [encodePath(name), setFieldValidate, validate],
     );
 
     const errorProps = useMemo(
-        (): {validateStatus?: ValidateStatus, help?: string} => {
+        (): {validateStatus?: ValidateStatus; help?: string} => {
             if (submitCount === 0 && !touched && !enableErrorWhenUntouched) {
                 return {};
             }
@@ -57,12 +57,12 @@ export const Field = (props: FieldProps) => {
                 help: error,
             };
         },
-        [error, submitCount, touched, enableErrorWhenUntouched]
+        [error, submitCount, touched, enableErrorWhenUntouched],
     );
 
     const handleChange = useFieldHandler(name, {type});
 
-    const clonedChildren = Children.map(children as any, child => {
+    const clonedChildren = Children.map(children as any, (child) => {
         if (isValidElement(child)) {
             const childProps: any = child?.props;
             const valueKey = type === 'checkbox' ? 'checked' : 'value';

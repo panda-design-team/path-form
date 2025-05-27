@@ -10,7 +10,9 @@ interface Params {
 const getClassName = ({hasGap, width}: Params) => css`
     ${!hasGap && 'margin-bottom: 0 !important;'}
 
-    ${width === 'fit-content' ? undefined : `
+    ${width === 'fit-content'
+        ? undefined
+        : `
         > .ant5-form-item-row > .ant5-form-item-label {
             min-width: ${width}px;
         }
@@ -46,7 +48,7 @@ export function FieldLayout({
                 wrapperCol: {flex: 1},
             };
         },
-        [width]
+        [width],
     );
 
     return (
